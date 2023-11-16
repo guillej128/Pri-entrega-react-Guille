@@ -25,7 +25,7 @@ export const NavBar = () => {
               variant="inherit"
               sx={{ color: 'inherit', textDecoration: 'none' }}
             >
-              Moto Mania.
+              Moto Mania
             </Link>
           </Typography>
         </Grid>
