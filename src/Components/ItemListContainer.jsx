@@ -1,23 +1,46 @@
-import { Box, Container, Typography, List, ListItem } from "@mui/material";
+import { Typography } from "@mui/material";
+import Container from "react-bootstrap/Container";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { ItemList } from "./ItemList";
+import { products } from "../data/products";
 
-const ItemListContainer = ({ titulo }) => {
+
+export const ItemListcontainer = () => {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+       
+        const response = await new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(products);
+          }, 2000);
+        });
+
+        if (id) {
+          const filtered = response.filter((item) => item.category === id);
+          setItems(filtered);
+        } else {
+          setItems(response);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
   return (
-    <Container>
-      <Typography variant="h2">
-        Motos nuevas
-      </Typography>
-      <Box sx={{ color: 'error.main' }}>
-        <Typography variant="h2">
-          {titulo}
-        </Typography>
-      </Box>
-      <List>
-        <ListItem>Moto 110cc</ListItem>
-        <ListItem>Moto 125cc</ListItem>
-        <ListItem>Moto 200cc</ListItem>
-      </List>
+    <Container className="mt-4">
+      <Typography variant="h1">Motos nuevas</Typography>
+      <ItemList items={items} />
     </Container>
-  );
+  )
 };
-
-export default ItemListContainer;
